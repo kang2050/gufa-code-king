@@ -46,8 +46,8 @@ SCENES = [
     {
         "id": "ch14_linwanqiao_window",
         "age_hint": "NOT the protagonist — focus on a different character, a composed woman in her mid-30s named LIN WANQIAO",
-        "scene": "Floor-to-ceiling window of the 31st floor of a city office tower, late morning. A composed elegant Chinese woman in her mid-30s, wavy shoulder-length hair, beige trench coat, pale gold earrings, stands with her back turned to the viewer, facing the window. In the reflection on the glass AND on the wall-mounted TV to her right, a news feed is broadcasting — blurred shot of a black emergency response vehicle parked at a small alley; beside the vehicle a thin-shouldered man in an old coat carries a black canvas bag. In her hand she holds a cup of coffee, its steam rising. The open-plan office behind her is chaotic — colleagues crowded around a projector in a meeting room. She herself stands still, not moving. Camera framing behind her shoulder. Her expression cannot be seen clearly.",
-        "mood": "Cold blue-white. City panic in the background, stillness in the foreground. Regret without tears."
+        "scene": "Floor-to-ceiling window of the 31st floor of a city office tower, late morning under heavy overcast sky. A composed elegant Chinese woman in her mid-30s, wavy shoulder-length hair, beige trench coat, pale gold earrings, stands with her back turned to the viewer, facing the window. In her hand she holds a cup of coffee, faint steam rising. On a wall-mounted flat TV to her right, the screen shows ONLY a silent footage: a dim gray narrow city alley, an unmarked black van parked at the alley entrance, a thin-shouldered Chinese man in a plain worn dark coat walking past the van carrying a plain black canvas shoulder bag. The TV screen shows NO NEWS BANNER, NO ENGLISH TEXT, NO HEADLINE, NO SUBTITLE — the entire screen is just the alley footage with cinematic film grain. The open-plan office behind her is chaotic — out-of-focus colleagues crowded around a projector in a distant glass-walled meeting room. She herself stands still, not moving. Camera framed from slightly behind her shoulder. Her face cannot be seen clearly.",
+        "mood": "Cold blue-white. The city in the background is in disarray, stillness in the foreground. A look across time, regret without tears. ABSOLUTELY NO TEXT ANYWHERE ON THE TV OR IN THE SCENE."
     },
     {
         "id": "ch16_victory_night_alone",
@@ -63,9 +63,9 @@ SCENES = [
     },
     {
         "id": "s2_blank_second_page",
-        "age_hint": "around 64 years old, hair half white, thin, composed, sitting in a small simple book study at sunset",
-        "scene": "A clean simple home study by a wide river window at dusk. Golden horizontal sunset light cutting in across the wooden desk. GU CHENZHOU, now 64, hair half white, thin, sits at the desk. On the desk: an old worn canvas bag with 'GUIXU · 2038' on its side, opened; a very old small notebook lies open, the first page shows one hand-written line of Chinese and the second page is blank. His hand with thin veined skin rests on the blank second page. His eyes are fixed on the empty page. On his right, a laptop screen glows faintly — on that laptop screen we can see three Chinese characters '我 怕 的——' at the top of a blank text editor with a blinking cursor after them. No one else in the room. Absolute stillness. Framing close enough to see both the notebook and the laptop screen in the same shot.",
-        "mood": "Quiet, ceremonial, doubt. An old hero facing a second choice. Open ending."
+        "age_hint": "around 64 years old — NOT older, NOT 70+. Hair is salt-and-pepper with roughly equal black and grey strands, still thick and neatly combed, NOT bald, NOT thinning on top. Face remains the same person as in the reference image — just aged by about 20 years. Slim but upright posture. Still composed and sharp.",
+        "scene": "A clean simple home study by a wide river window at dusk. Warm golden horizontal sunset light cutting in across a worn wooden desk. GU CHENZHOU, same face as the reference image but about 64 years old, hair still thick but now half black half grey, sits alone at the desk. On the desk, in the foreground: an old worn canvas shoulder bag with the faded handwritten text 'GUIXU · 2038' on its side — the bag lies open. A very old small hand-bound notebook lies open on the desk — the first page shows one line of small hand-written Chinese characters; the second page is completely blank. His hand with slightly prominent veins rests lightly on the blank second page. His eyes are fixed on the empty page, a silent expression of doubt. To his right, a slim modern laptop sits — its screen glowing faintly — on the laptop screen is a nearly-empty minimal text editor, and at the top of the editor three large Chinese characters are clearly readable: '我 怕 的——' followed by a blinking cursor. The laptop screen is positioned and framed so the viewer can clearly read those three Chinese characters. No other person in the room. Absolute stillness.",
+        "mood": "Quiet, ceremonial, doubt. An old hero facing a second choice. Open ending. Warm golden light against the cold blue river outside."
     },
 ]
 
@@ -147,20 +147,24 @@ def generate_one(scene: dict, ref_data_url: str) -> tuple[str, Path | None, str 
 
 
 def main():
-    print(f"=== gen {len(SCENES)} images ===")
+    only = sys.argv[1:] if len(sys.argv) > 1 else None
+    scenes = [s for s in SCENES if not only or s["id"] in only]
+    print(f"=== gen {len(scenes)} images ===")
+    if only:
+        print(f"filter: {only}")
     print(f"ref image: {REF_IMG} ({REF_IMG.stat().st_size // 1024}KB)")
     ref_url = encode_ref_image()
     print(f"ref base64 len: {len(ref_url) // 1024}KB")
     print(f"out dir: {OUT_DIR}")
     print()
     print("scenes:")
-    for s in SCENES:
+    for s in scenes:
         print(f"  - {s['id']}")
     print()
 
     results = []
     with ThreadPoolExecutor(max_workers=3) as pool:
-        futures = [pool.submit(generate_one, s, ref_url) for s in SCENES]
+        futures = [pool.submit(generate_one, s, ref_url) for s in scenes]
         for f in as_completed(futures):
             results.append(f.result())
 
