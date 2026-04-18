@@ -363,6 +363,13 @@
       "message": "auto-save 2026-04-18 14:25 (~1)",
       "hash": "2239b6d",
       "files_changed": 1
+    },
+    {
+      "ts": "2026-04-18T14:31:03+08:00",
+      "type": "commit",
+      "message": "第二部 · 第四章《那一夜，他关掉了屏幕》(+3800 字)",
+      "hash": "18670d2",
+      "files_changed": 4
     }
   ]
 }
