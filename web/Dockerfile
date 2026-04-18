@@ -2,7 +2,24 @@ FROM nginx:alpine
 
 COPY . /usr/share/nginx/html/
 
-RUN printf 'server {\n\
+RUN printf 'types {\n\
+    text/html                             html htm;\n\
+    text/css                              css;\n\
+    text/plain                            txt;\n\
+    text/markdown                         md;\n\
+    application/javascript                js;\n\
+    application/json                      json;\n\
+    image/jpeg                            jpg jpeg;\n\
+    image/png                             png;\n\
+    image/webp                            webp;\n\
+    image/svg+xml                         svg;\n\
+    image/x-icon                          ico;\n\
+    font/woff                             woff;\n\
+    font/woff2                            woff2;\n\
+}\n\
+default_type application/octet-stream;\n\
+\n\
+server {\n\
     listen 80;\n\
     server_name _;\n\
     root /usr/share/nginx/html;\n\
@@ -26,8 +43,10 @@ RUN printf 'server {\n\
     }\n\
 \n\
     gzip on;\n\
-    gzip_types text/plain text/markdown text/css application/javascript application/json image/svg+xml;\n\
-    gzip_min_length 1024;\n\
+    gzip_comp_level 6;\n\
+    gzip_types text/plain text/markdown text/css application/javascript application/json image/svg+xml text/html;\n\
+    gzip_min_length 512;\n\
+    gzip_vary on;\n\
 }\n' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
