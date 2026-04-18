@@ -833,6 +833,7 @@ const CHAPTERS = [
       { file: 'extra/s2_blank_second_page.jpg',        cap: '我 怕 的——',                   sub: '第二部 · 序章 · 留白' }
     ] },
   { n: -1, title: '另一个看见了的人',                 img: 'extra/s2_blank_second_page.jpg',      volume: '第二部 · 起笔',             hint: '沈陌登门：顾先生，我写到这里，就等您告诉我，下面该不该写下去' },
+  { n: -2, title: '他差一点把那些刺长回来',           img: null,                                   volume: '第二部 · 起笔',             hint: '三天读尽白皮书，差一点对一个系统动了信任测试的念头；出门去见了韩锐' },
 ];
 
 function renderChapterList() {
@@ -845,7 +846,7 @@ function renderChapterList() {
     }
     let num;
     if (ch.n === 0) num = '终';
-    else if (ch.n === -1) num = 'II';
+    else if (ch.n < 0) num = 'II·' + String(-ch.n).padStart(2, '0');
     else num = ch.n.toString().padStart(2, '0');
     const title = ch.n === 0 ? ch.title.replace('终章 · ', '') : ch.title;
     html += `
@@ -944,12 +945,14 @@ function renderNovel(md) {
       // kicker assigned below
       var kicker = isEpilogue ? 'EPILOGUE' : 'CHAPTER ' + num;
     } else {
-      const m2 = heading.match(/^第二部\s*·\s*第一章\s*·\s*(.+)$/);
+      const m2 = heading.match(/^第二部\s*·\s*第(.+?)章\s*·\s*(.+)$/);
       if (!m2) return;
       isPart2 = true;
-      num = 'II · 01';
-      title = m2[1];
-      var kicker = 'PART II · CHAPTER 01';
+      const cnMap = { '一': '01', '二': '02', '三': '03', '四': '04', '五': '05', '六': '06', '七': '07', '八': '08', '九': '09', '十': '10' };
+      const arabic = cnMap[m2[1]] || m2[1];
+      num = 'II · ' + arabic;
+      title = m2[2];
+      var kicker = 'PART II · CHAPTER ' + arabic;
     }
     const ch = CHAPTERS[idx];
     const imgPath = ch ? `./images/${ch.img}` : '';
