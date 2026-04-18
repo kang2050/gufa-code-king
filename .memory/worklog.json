@@ -496,6 +496,13 @@
       "message": "auto-save 2026-04-18 15:48 (~2)",
       "hash": "15b2812",
       "files_changed": 2
+    },
+    {
+      "ts": "2026-04-18T15:50:40+08:00",
+      "type": "commit",
+      "message": "修阅读'一直载入中'：novel.md gzip + 章节索引 + loading 状态",
+      "hash": "33c60aa",
+      "files_changed": 3
     }
   ]
 }
