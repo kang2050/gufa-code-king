@@ -1,0 +1,12 @@
+.DS_Store
+node_modules/
+
+# 大素材本地归档，不进 Git（GitHub 单文件 100MB 上限）
+raw-packages/
+source/*.png
+
+# 本地 playwright 截图
+hero.png
+hero2.png
+characters.png
+fullpage.jpeg
