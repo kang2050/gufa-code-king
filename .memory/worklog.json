@@ -307,6 +307,13 @@
       "message": "auto-save 2026-04-18 13:56 (~1)",
       "hash": "1c37564",
       "files_changed": 1
+    },
+    {
+      "ts": "2026-04-18T14:02:36+08:00",
+      "type": "commit",
+      "message": "第二部 · 第一章《另一个看见了的人》(+304 行 / ~3800 字)",
+      "hash": "9b05fba",
+      "files_changed": 4
     }
   ]
 }
