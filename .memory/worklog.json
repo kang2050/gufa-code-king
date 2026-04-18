@@ -188,6 +188,13 @@
       "message": "auto-save 2026-04-18 12:31 (~2)",
       "hash": "1146216",
       "files_changed": 2
+    },
+    {
+      "ts": "2026-04-18T12:34:45+08:00",
+      "type": "commit",
+      "message": "转向反英雄叙事：阴暗面 + 创伤应激 + 终章留悬念（+5500 字）",
+      "hash": "5faf84d",
+      "files_changed": 3
     }
   ]
 }
