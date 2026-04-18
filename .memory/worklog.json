@@ -20,6 +20,13 @@
       "message": "auto-save 2026-04-18 10:40 (~1)",
       "hash": "b45c0bb",
       "files_changed": 1
+    },
+    {
+      "ts": "2026-04-18T10:44:08+08:00",
+      "type": "commit",
+      "message": "记录 Coolify 部署细节与踩坑",
+      "hash": "dd1135f",
+      "files_changed": 2
     }
   ]
 }
