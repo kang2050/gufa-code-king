@@ -35,11 +35,14 @@
 
 视觉：近未来都市写实（冷灰蓝 → 深黑金，跟随小说情绪推进）。
 
-## 部署
+## 部署（已上线 2026-04-18）
 
-- **Gitea**：`git.kang-kang.com/kangwang/gufa-code-king`
-- **Coolify 静态 dockerfile (nginx:alpine)**
-- **域名**：`gufa-code.kang-kang.com`（待定，也可用更短别名）
+- **线上**：https://gufa-code.kang-kang.com  (HTTP/2 + HTTP/3)
+- **Gitea 主仓**：https://git.kang-kang.com/kangwan/gufa-code-king
+- **GitHub 镜像**：https://github.com/kang2050/gufa-code-king
+- **Coolify UUID**：`yu2cuh6p5lk898uf2ow7wg53`（project 网页集合 `ew48wsw8wskkgc8ksso4488s`）
+- **build**：dockerfile，base `/web`，Dockerfile `/Dockerfile`（nginx:alpine）
+- **踩坑**：第一次传 git_repository 只写到 `https://git.kang-kang.com/kangwan/gufa-code-king`（未带 .git 和凭证），Coolify 存储时截取成 `kangwan/gufa-code-king` 当作 GitHub owner/repo，部署失败；PATCH 修正为完整 `https://kangwan:<token>@git.kang-kang.com/kangwan/gufa-code-king.git` 后立即成功。
 
 ## 时间线
 
