@@ -335,6 +335,13 @@
       "message": "第二部 · 第二章《他差一点把那些刺长回来》(+3800 字)",
       "hash": "368fcfa",
       "files_changed": 3
+    },
+    {
+      "ts": "2026-04-18T14:18:26+08:00",
+      "type": "commit",
+      "message": "网页适配第二部多章：正则支持第N章（中文/阿拉伯数字）+ CHAPTERS 加第二部 Ch2 条目",
+      "hash": "64b80f1",
+      "files_changed": 2
     }
   ]
 }
