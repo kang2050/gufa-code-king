@@ -922,13 +922,21 @@ function closeLightbox() {
 }
 
 async function loadNovel() {
+  const container = document.getElementById('reader-content');
   try {
-    const resp = await fetch('./novel.md');
+    container.innerHTML = '<div class="loading">正在下载全本 …</div>';
+    const resp = await fetch('./novel.md', { cache: 'no-cache' });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    container.innerHTML = '<div class="loading">正在渲染章节 …</div>';
     const text = await resp.text();
+    // Yield to the browser so the loading message paints before heavy work
+    await new Promise(r => setTimeout(r, 0));
     renderNovel(text);
   } catch (e) {
-    document.getElementById('reader-content').innerHTML =
-      '<div class="loading" style="color: var(--red)">小说载入失败：' + e.message + '</div>';
+    console.error('loadNovel failed:', e);
+    container.innerHTML =
+      '<div class="loading" style="color: var(--red)">小说载入失败：' + e.message +
+      '。<a href="./novel.md" style="color: var(--gold); text-decoration: underline;">直接打开 novel.md</a></div>';
   }
 }
 
@@ -944,24 +952,28 @@ function renderNovel(md) {
     let m = heading.match(/^(第(\d+)章|终章)\s+(.+)$/);
     let isPart2 = false;
     let num, title;
+    const cnMap = { '一': '01', '二': '02', '三': '03', '四': '04', '五': '05', '六': '06', '七': '07', '八': '08', '九': '09', '十': '10' };
+    const cnToInt = { '一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10 };
+    let kicker, chN;
     if (m) {
       const isEpilogue = !m[2];
       num = isEpilogue ? '终' : m[2].padStart(2, '0');
       title = m[3];
-      // kicker assigned below
-      var kicker = isEpilogue ? 'EPILOGUE' : 'CHAPTER ' + num;
+      kicker = isEpilogue ? 'EPILOGUE' : 'CHAPTER ' + num;
+      chN = isEpilogue ? 0 : parseInt(m[2]);
     } else {
       const m2 = heading.match(/^第二部\s*·\s*第(.+?)章\s*·\s*(.+)$/);
       if (!m2) return;
       isPart2 = true;
-      const cnMap = { '一': '01', '二': '02', '三': '03', '四': '04', '五': '05', '六': '06', '七': '07', '八': '08', '九': '09', '十': '10' };
       const arabic = cnMap[m2[1]] || m2[1];
       num = 'II · ' + arabic;
       title = m2[2];
-      var kicker = 'PART II · CHAPTER ' + arabic;
+      kicker = 'PART II · CHAPTER ' + arabic;
+      chN = -(cnToInt[m2[1]] || parseInt(m2[1]));  // -1 = Part II Ch1, -2 = Part II Ch2, ...
     }
-    const ch = CHAPTERS[idx];
-    const imgPath = ch ? `./images/${ch.img}` : '';
+    // Match chapter by semantic n (immune to section index drift caused by non-chapter ## headings)
+    const ch = CHAPTERS.find(c => c.n === chN);
+    const imgPath = (ch && ch.img) ? `./images/${ch.img}` : '';
     const paragraphs = body.split(/\n\s*\n/).map(p => {
       const line = p.trim();
       if (!line) return '';

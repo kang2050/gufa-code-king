@@ -2,24 +2,7 @@ FROM nginx:alpine
 
 COPY . /usr/share/nginx/html/
 
-RUN printf 'types {\n\
-    text/html                             html htm;\n\
-    text/css                              css;\n\
-    text/plain                            txt;\n\
-    text/markdown                         md;\n\
-    application/javascript                js;\n\
-    application/json                      json;\n\
-    image/jpeg                            jpg jpeg;\n\
-    image/png                             png;\n\
-    image/webp                            webp;\n\
-    image/svg+xml                         svg;\n\
-    image/x-icon                          ico;\n\
-    font/woff                             woff;\n\
-    font/woff2                            woff2;\n\
-}\n\
-default_type application/octet-stream;\n\
-\n\
-server {\n\
+RUN printf 'server {\n\
     listen 80;\n\
     server_name _;\n\
     root /usr/share/nginx/html;\n\
@@ -33,7 +16,13 @@ server {\n\
         access_log off;\n\
     }\n\
 \n\
-    # html / md: always revalidate\n\
+    # novel.md specifically — force text/markdown so gzip triggers\n\
+    location = /novel.md {\n\
+        default_type "text/markdown; charset=utf-8";\n\
+        add_header Cache-Control "public, max-age=0, must-revalidate";\n\
+    }\n\
+\n\
+    # html / md catch-all: always revalidate\n\
     location ~* \\.(html|md)$ {\n\
         add_header Cache-Control "public, max-age=0, must-revalidate";\n\
     }\n\
