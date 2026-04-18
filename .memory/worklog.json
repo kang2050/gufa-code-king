@@ -454,6 +454,13 @@
       "message": "auto-save 2026-04-18 15:20 (~1)",
       "hash": "c053bfc",
       "files_changed": 1
+    },
+    {
+      "ts": "2026-04-18T15:23:25+08:00",
+      "type": "commit",
+      "message": "第二部 · 第八章《接下来这二十年，换我来写》(+3500 字) —— 全书·完",
+      "hash": "d78383e",
+      "files_changed": 4
     }
   ]
 }
